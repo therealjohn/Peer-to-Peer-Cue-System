@@ -93,6 +93,8 @@
                         conn = c;
                         console.log("Connected to: " + conn.peer);
                         status.innerHTML = "Connected";
+
+                        sendState();
                         ready();
                     });
                     peer.on('disconnected', function () {
@@ -123,6 +125,7 @@
                     conn.on('data', function (data) {
                         console.log("Data recieved");
                         var cueString = "<span class=\"cueMsg\">Cue: </span>";
+                        var cue = data;
                         switch (data) {
                             case 'Go':
                                 go();
@@ -141,9 +144,18 @@
                                 addMessage(cueString + data);
                                 break;
                             default:
+                                cue = "";
                                 addMessage("<span class=\"peerMsg\">Peer: </span>" + data);
                                 break;
                         };
+                        
+                        var jsonState = 
+                        {
+                            "messages" : message.innerHTML,
+                            "cue" : data
+                        };
+
+                        saveState(JSON.stringify(jsonState));
                     });
                     conn.on('close', function () {
                         status.innerHTML = "Connection reset<br>Awaiting connection...";
@@ -208,6 +220,43 @@
                     addMessage("Msgs cleared");
                 }
 
+                function loadState () {
+                    var state = JSON.parse(localStorage.getItem('state'));
+                    
+                    // show message history
+                    message.innerHTML = state.messages;
+
+                    // show any previous cue state
+                    switch (state.cue) {
+                        case 'Go':
+                            go();
+                            break;
+                        case 'Fade':
+                            fade();
+                            break;
+                        case 'Off':
+                            off();
+                            break;
+                        case 'Reset':
+                            reset();
+                            break;
+                        default:
+                            break;
+                    };
+                }
+
+                function saveState(state) {
+                    localStorage.setItem('state', state)
+                }
+
+                function sendState()
+                {
+                    if (conn && conn.open) {
+                        var state = localStorage.getItem('state');
+                        conn.send(state);
+                    }
+                }
+
                 // Listen for enter in message box
                 sendMessageBox.addEventListener('keypress', function (e) {
                     var event = e || window.event;
@@ -223,6 +272,11 @@
                         conn.send(msg);
                         console.log("Sent: " + msg)
                         addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
+
+                        var state = JSON.parse(localStorage.getItem('state'));
+                        state.message = message.innerHTML;
+                        saveState(JSON.stringify(state));
+                        sendState();
                     } else {
                         console.log('Connection is closed');
                     }
