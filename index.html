@@ -29,7 +29,6 @@
                 <td>
                     <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
                     <button type="button" id="sendButton">Send</button>
-                    <button type="button" id="clearMsgsButton">Clear Msgs (Local)</button>
                 </td>
             </tr>
             <tr>
@@ -216,30 +215,7 @@
 
                     message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
                 }
-
-				sendMessageBox.addEventListener('keypress', function (e) {
-                    var event = e || window.event;
-                    var char = event.which || event.keyCode;
-                    if (char == '13')
-                        sendButton.click();
-                });
-
-				sendButton.addEventListener('click', function () {
-                    if (conn && conn.open) {
-                        var msg = sendMessageBox.value;
-                        sendMessageBox.value = "";
-                        conn.send(msg);
-                        console.log("Sent: " + msg)
-                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
-
-                        var state = JSON.parse(localStorage.getItem('state'));
-                        state.messages = message.innerHTML;
-                        saveState(JSON.stringify(state));
-                        sendState();
-                    } else {
-                        console.log('Connection is closed');
-                    }
-                });
+				
 
 				function loadState () {
                     var state = JSON.parse(localStorage.getItem('state'));
@@ -285,6 +261,40 @@
 					isServer = true;
                     initialize();					
                 };
+
+				sendMessageBox.addEventListener('keypress', function (e) {
+                    var event = e || window.event;
+                    var char = event.which || event.keyCode;
+                    if (char == '13')
+                        sendButton.click();
+                });
+
+				sendButton.addEventListener('click', function () {
+                    if (conn && conn.open) {
+						
+						var msg = sendMessageBox.value;
+                        sendMessageBox.value = "";
+						conn.send(msg);
+						console.log("Sent: " + msg)
+
+						if(isServer)
+						{
+
+						}
+
+                        
+                        
+                        
+                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
+
+                        var state = JSON.parse(localStorage.getItem('state'));
+                        state.messages = message.innerHTML;
+                        saveState(JSON.stringify(state));
+                        sendState();
+                    } else {
+                        console.log('Connection is closed');
+                    }
+                });
 
 				hostButton.addEventListener('click', host);
 				connectButton.addEventListener('click', join);
