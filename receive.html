@@ -94,7 +94,11 @@
                         console.log("Connected to: " + conn.peer);
                         status.innerHTML = "Connected";
                         loadState();
-                        sendState(conn);
+
+                        conn.on('open', function() {
+                                sendState();
+                            });
+
                         ready();
                     });
                     peer.on('disconnected', function () {
