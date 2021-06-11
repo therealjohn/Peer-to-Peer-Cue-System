@@ -42,7 +42,7 @@
         <script type="text/javascript">
             (function () {
 
-				const isServer;
+				var isServer = false;
 
 				var recvId = document.getElementById("receiver-id");
 				var recvIdInput = document.getElementById("receiver-id-connect");
@@ -279,6 +279,7 @@
                 }
 
 				function host() {
+					isServer = true;
                     initialize();					
                 };
 
