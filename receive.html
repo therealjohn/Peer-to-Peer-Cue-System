@@ -94,11 +94,6 @@
                         console.log("Connected to: " + conn.peer);
                         status.innerHTML = "Connected";
                         loadState();
-
-                        conn.on('open', function() {
-                                sendState();
-                            });
-
                         ready();
                     });
                     peer.on('disconnected', function () {
@@ -146,6 +141,9 @@
                             case 'Reset':
                                 reset();
                                 addMessage(cueString + data);
+                                break;
+                            case 'Sync':
+                                sendState();
                                 break;
                             default:
                                 cue = "";

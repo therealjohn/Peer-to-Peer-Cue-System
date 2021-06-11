@@ -143,6 +143,8 @@
                         var command = getUrlParam("command");
                         if (command)
                             conn.send(command);
+
+                        conn.send("Sync");
                     });
                     // Handle incoming data (messages only since this is the signal sender)
                     conn.on('data', function (data) {
