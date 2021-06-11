@@ -93,7 +93,7 @@
                         conn = c;
                         console.log("Connected to: " + conn.peer);
                         status.innerHTML = "Connected";
-
+                        loadState();
                         sendState();
                         ready();
                     });
