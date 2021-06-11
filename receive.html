@@ -156,6 +156,7 @@
                         };
 
                         saveState(JSON.stringify(jsonState));
+                        sendState();
                     });
                     conn.on('close', function () {
                         status.innerHTML = "Connection reset<br>Awaiting connection...";
@@ -219,10 +220,41 @@
                     message.innerHTML = "";
                     addMessage("Msgs cleared");
                 }
+                
+
+                // Listen for enter in message box
+                sendMessageBox.addEventListener('keypress', function (e) {
+                    var event = e || window.event;
+                    var char = event.which || event.keyCode;
+                    if (char == '13')
+                        sendButton.click();
+                });
+                // Send message
+                sendButton.addEventListener('click', function () {
+                    if (conn && conn.open) {
+                        var msg = sendMessageBox.value;
+                        sendMessageBox.value = "";
+                        conn.send(msg);
+                        console.log("Sent: " + msg)
+                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
+
+                        var state = JSON.parse(localStorage.getItem('state'));
+                        state.messages = message.innerHTML;
+                        saveState(JSON.stringify(state));
+                        sendState();
+                    } else {
+                        console.log('Connection is closed');
+                    }
+                });
 
                 function loadState () {
                     var state = JSON.parse(localStorage.getItem('state'));
                     
+                    if(!state)
+                    {
+                        state = { "messages" : "", "cue" : "" };
+                    }
+
                     // show message history
                     message.innerHTML = state.messages;
 
@@ -256,31 +288,6 @@
                         conn.send(state);
                     }
                 }
-
-                // Listen for enter in message box
-                sendMessageBox.addEventListener('keypress', function (e) {
-                    var event = e || window.event;
-                    var char = event.which || event.keyCode;
-                    if (char == '13')
-                        sendButton.click();
-                });
-                // Send message
-                sendButton.addEventListener('click', function () {
-                    if (conn && conn.open) {
-                        var msg = sendMessageBox.value;
-                        sendMessageBox.value = "";
-                        conn.send(msg);
-                        console.log("Sent: " + msg)
-                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
-
-                        var state = JSON.parse(localStorage.getItem('state'));
-                        state.message = message.innerHTML;
-                        saveState(JSON.stringify(state));
-                        sendState();
-                    } else {
-                        console.log('Connection is closed');
-                    }
-                });
 
                 // Clear messages box
                 clearMsgsButton.addEventListener('click', clearMessages);
