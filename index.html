@@ -55,11 +55,7 @@
 				var hostButton = document.getElementById("host-button");
 
 				function initialize() {
-					// Close old connection
-                    if (conn) {
-                        conn.close();
-                    }
-					
+
 					peer = new Peer(null, {
                         debug: 2
                     });
