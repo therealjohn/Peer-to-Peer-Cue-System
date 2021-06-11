@@ -119,12 +119,14 @@
 				}
 
 				function join() {
-					initialize();
+					
                     // Close old connection
                     if (conn) {
                         conn.close();
                     }
 
+					initialize();
+					
                     // Create connection to destination peer specified in the input field
                     conn = peer.connect(recvIdInput.value, {
                         reliable: true
