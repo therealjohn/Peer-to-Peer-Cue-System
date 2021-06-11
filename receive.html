@@ -94,7 +94,7 @@
                         console.log("Connected to: " + conn.peer);
                         status.innerHTML = "Connected";
                         loadState();
-                        sendState();
+                        sendState(conn);
                         ready();
                     });
                     peer.on('disconnected', function () {
@@ -285,6 +285,12 @@
                 {
                     var state = localStorage.getItem('state');
                     conn.send(state);
+                }
+
+                function sendState(connection)
+                {
+                    var state = localStorage.getItem('state');
+                    connection.send(state);
                 }
 
                 // Clear messages box
