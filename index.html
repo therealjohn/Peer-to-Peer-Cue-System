@@ -42,8 +42,10 @@
         <script type="text/javascript">
             (function () {
 
+				var lastPeerId = null;
+                var peer = null; // own peer object
 				var isServer = false;
-
+				var conn = null;
 				var recvId = document.getElementById("receiver-id");
 				var recvIdInput = document.getElementById("receiver-id-connect");
 				var status = document.getElementById("status");
