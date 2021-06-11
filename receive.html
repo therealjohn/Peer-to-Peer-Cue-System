@@ -283,10 +283,8 @@
 
                 function sendState()
                 {
-                    if (conn && conn.open) {
-                        var state = localStorage.getItem('state');
-                        conn.send(state);
-                    }
+                    var state = localStorage.getItem('state');
+                    conn.send(state);
                 }
 
                 // Clear messages box
