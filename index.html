@@ -17,7 +17,7 @@
 			<tr>
 				<td>
                     <span style="font-weight: bold">ID: </span>
-                    <input type="text" id="receiver-id" title="Input the ID from receive.html">
+                    <input type="text" id="receiver-id-connect" title="Input the ID from receive.html">
                     <button id="connect-button">Connect</button>
                 </td>
 			</tr>
@@ -45,6 +45,7 @@
 				const isServer;
 
 				var recvId = document.getElementById("receiver-id");
+				var recvIdInput = document.getElementById("receiver-id-connect");
 				var status = document.getElementById("status");
 				var message = document.getElementById("message");
 				var sendMessageBox = document.getElementById("sendMessageBox");
