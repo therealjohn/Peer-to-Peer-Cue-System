@@ -86,12 +86,13 @@
                             });
                             return;
                         }
+
+						conn = c;
+						console.log("Connected to: " + conn.peer);
+						status.innerHTML = "Connected";
 						
 						if(isServer)
-						{
-							conn = c;
-							console.log("Connected to: " + conn.peer);
-							status.innerHTML = "Connected";
+						{							
 							loadState();
 							setTimeout(function() { sendState(); }, 500);
 							ready();
@@ -126,7 +127,7 @@
                     }
 
 					initialize();
-					
+
                     // Create connection to destination peer specified in the input field
                     conn = peer.connect(recvIdInput.value, {
                         reliable: true
